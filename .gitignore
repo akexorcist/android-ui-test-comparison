@@ -1,0 +1,11 @@
+# build outputs
+app/out/
+app/*.apk
+app/*.idsig
+kakao/**/build/
+kakao/.gradle/
+.gradle/
+# node
+node_modules/
+# maestro debug
+**/.maestro/

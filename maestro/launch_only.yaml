@@ -1,0 +1,4 @@
+appId: dev.mobilewright.testapp
+---
+- launchApp:
+    clearState: true

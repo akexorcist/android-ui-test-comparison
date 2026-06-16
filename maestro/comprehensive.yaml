@@ -1,0 +1,16 @@
+appId: dev.mobilewright.testapp
+---
+- launchApp:
+    clearState: true
+- tapOn: "TAP ME"
+- assertVisible: "Count: 1"
+- tapOn: "input-field"
+- inputText: "hello"
+- tapOn: "ECHO"
+- assertVisible: "Echo: hello"
+- longPressOn: "LONG PRESS HERE"
+- assertVisible: "Long: pressed"
+- scrollUntilVisible:
+    element:
+      text: "BOTTOM REACHED"
+- assertVisible: "BOTTOM REACHED"

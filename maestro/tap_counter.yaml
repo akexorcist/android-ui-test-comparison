@@ -1,0 +1,12 @@
+appId: dev.mobilewright.testapp
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: "TAP ME"
+- tapOn:
+    text: "TAP ME"
+- tapOn:
+    text: "TAP ME"
+- assertVisible:
+    text: "Count: 3"

@@ -1,0 +1,12 @@
+{
+  "name": "uitest-comparison-appium",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bench": "node bench.mjs"
+  },
+  "dependencies": {
+    "appium": "^2.11.0",
+    "webdriverio": "^9.0.0"
+  }
+}
