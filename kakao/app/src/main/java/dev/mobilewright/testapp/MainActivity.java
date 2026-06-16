@@ -1,8 +1,11 @@
 package dev.mobilewright.testapp;
 
 import android.app.Activity;
+import android.graphics.Insets;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -13,6 +16,7 @@ import android.widget.TextView;
  * Deterministic UI covering the basic UI interactions for the tool benchmark:
  *   tap, text entry, long press, swipe/scroll — each with a verifiable result.
  * Wrapped in a ScrollView so swipe/scroll reveals an off-screen bottom marker.
+ * Fully supports edge-to-edge (targetSdk 35+) by padding content for system bars.
  */
 public class MainActivity extends Activity {
 
@@ -98,6 +102,29 @@ public class MainActivity extends Activity {
         ScrollView scroll = new ScrollView(this);
         scroll.setContentDescription("scroll");
         scroll.addView(root);
+        scroll.setClipToPadding(false); // let last item scroll above the nav-bar inset padding
         setContentView(scroll);
+
+        applyEdgeToEdgeInsets(scroll);
+    }
+
+    /**
+     * Edge-to-edge support: on Android 11+ (covers the targetSdk 35/36 edge-to-edge
+     * enforcement on Android 15/16) draw behind the system bars and pad the content by the
+     * system-bar insets, so views are not hidden under the status/navigation bars.
+     */
+    private void applyEdgeToEdgeInsets(final View content) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            return; // pre-edge-to-edge: framework fits system windows by default
+        }
+        getWindow().setDecorFitsSystemWindows(false);
+        content.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+                Insets bars = insets.getInsets(WindowInsets.Type.systemBars());
+                v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+                return WindowInsets.CONSUMED;
+            }
+        });
     }
 }

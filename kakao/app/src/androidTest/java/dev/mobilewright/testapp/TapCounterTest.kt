@@ -1,12 +1,6 @@
 package dev.mobilewright.testapp
 
-import android.util.Log
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.github.kakaocup.kakao.edit.KEditText
@@ -17,6 +11,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Kakao/Espresso version of the shared benchmark flow:
+ *   tap -> verify, type -> verify, long-press -> verify, swipe/scroll -> verify.
+ */
 @RunWith(AndroidJUnit4::class)
 class TapCounterTest {
 
@@ -34,29 +32,26 @@ class TapCounterTest {
         val bottomMarker = KTextView { withContentDescription("bottom-marker") }
     }
 
-    private fun mark(tag: String, t0: Long) = Log.i("MWBENCH", "$tag=${System.currentTimeMillis() - t0}")
-
     @Test
-    fun comprehensive6() {
+    fun basicInteractions() {
         Screen.onScreen<MwScreen> {
-            repeat(6) { i ->
-                var t = System.currentTimeMillis()
-                tapButton.click(); mark("tap", t); t = System.currentTimeMillis()
-                counter.hasText("Count: ${i * 2 + 1}"); mark("verify_tap", t); t = System.currentTimeMillis()
+            // 1) tap
+            tapButton.click()
+            counter.hasText("Count: 1")
 
-                // raw Espresso (no Kakao wrapper) for comparison
-                onView(withContentDescription("tap-button")).perform(ViewActions.click()); mark("raw_click", t); t = System.currentTimeMillis()
-                onView(withContentDescription("counter")).check(matches(isDisplayed())); mark("raw_check", t); t = System.currentTimeMillis()
+            // 2) type text
+            input.typeText("hello")
+            Espresso.closeSoftKeyboard()
+            echoButton.click()
+            echo.hasText("Echo: hello")
 
-                input.clearText(); input.typeText("hello"); Espresso.closeSoftKeyboard(); mark("type", t); t = System.currentTimeMillis()
-                echoButton.click(); mark("tap_echo", t); t = System.currentTimeMillis()
-                echo.hasText("Echo: hello"); mark("verify_type", t); t = System.currentTimeMillis()
-                longButton.longClick(); mark("long_press", t); t = System.currentTimeMillis()
-                longStatus.hasText("Long: pressed"); mark("verify_long", t); t = System.currentTimeMillis()
-                bottomMarker.scrollTo(); mark("swipe", t); t = System.currentTimeMillis()
-                bottomMarker.isDisplayed(); mark("verify_swipe", t)
-                counter.scrollTo()
-            }
+            // 3) long press
+            longButton.longClick()
+            longStatus.hasText("Long: pressed")
+
+            // 4) swipe / scroll
+            bottomMarker.scrollTo()
+            bottomMarker.isDisplayed()
         }
     }
 }

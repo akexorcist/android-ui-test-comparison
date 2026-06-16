@@ -19,16 +19,18 @@ runs an identical script and the only variable is the tool itself.
 > shelling out to `uiautomator dump` (~800 ms). It comes from
 > [mobilecli PR #286](https://github.com/mobile-next/mobilecli/pull/286).
 
-## Test device
+## Test devices
 
-| | |
-|---|---|
-| Device | `Pixel_5_API_33` emulator (`sdk_gphone64_arm64`) |
-| OS | Android 13 (API 33) |
-| ABI | arm64‑v8a |
-| Screen | 1080 × 2340, 440 dpi |
-| Animations | **disabled** (`window`/`transition`/`animator` scale = 0) |
-| Host | macOS 26.3 (arm64) |
+| | Local emulator | Real device |
+|---|---|---|
+| Device | Pixel 5 (AVD, `sdk_gphone64_arm64`) | Pixel 7 |
+| OS | Android 13 (API 33) | Android 16 (API 36) |
+| ABI | arm64‑v8a | arm64‑v8a |
+| Screen | 1080×2340 @440dpi | 1080×2400 |
+| Transport | in‑memory (localhost) | adb over USB 3.2 Gen 2 (SuperSpeed+, 10 Gbps) |
+| Animations | **disabled** | **disabled** |
+
+Host machine: macOS 26.3 (Apple Silicon, arm64).
 
 Disabling animations matters for Espresso (it waits for the UI to be idle); the other
 tools are unaffected. Set all three scales to 0 before running:
