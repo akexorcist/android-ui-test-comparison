@@ -4,11 +4,11 @@ Benchmark comparing how fast five Android UI testing tools run the same flow aga
 
 | Tool | How it drives the app |
 |---|---|
-| mobilewright (agent backend) | Playwright-style runner → mobilecli → on-device agent (`UiAutomation`) — speed improvement from [mobilecli PR #286](https://github.com/mobile-next/mobilecli/pull/286) |
-| mobilewright (adb backend) | Playwright-style runner → mobilecli → `adb` / `uiautomator dump` |
 | Appium | UiAutomator2 driver over HTTP (WebdriverIO client) |
 | Kakao / Espresso | In-process instrumentation (`connectedAndroidTest`) |
 | Maestro | YAML flow, hierarchy-based driver |
+| mobilewright (adb backend) | Playwright-style runner → mobilecli → `adb` / `uiautomator dump` |
+| mobilewright (agent backend) | Playwright-style runner → mobilecli → on-device agent (`UiAutomation`) — speed improvement from [mobilecli PR #286](https://github.com/mobile-next/mobilecli/pull/286) |
 
 ## Test devices
 
