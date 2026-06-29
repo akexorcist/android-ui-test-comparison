@@ -4,7 +4,7 @@ Benchmark comparing how fast five Android UI testing tools run the same flow aga
 
 | Tool | How it drives the app |
 |---|---|
-| mobilewright (agent backend) | Playwright-style runner → mobilecli → on-device agent (`UiAutomation`) |
+| mobilewright (agent backend) | Playwright-style runner → mobilecli → on-device agent (`UiAutomation`) — speed improvement from [mobilecli PR #286](https://github.com/mobile-next/mobilecli/pull/286) |
 | mobilewright (adb backend) | Playwright-style runner → mobilecli → `adb` / `uiautomator dump` |
 | Appium | UiAutomator2 driver over HTTP (WebdriverIO client) |
 | Kakao / Espresso | In-process instrumentation (`connectedAndroidTest`) |
@@ -45,18 +45,18 @@ Each step (action + verification) is timed separately over 6 iterations, reporte
 
 App launch and tool startup are excluded.
 
-| Operation | mw agent | mw adb | Appium | Kakao | Maestro |
+| Operation | Appium | Kakao | Maestro | mw adb | mw agent |
 |---|---|---|---|---|---|
-| tap | 69 (63–463) | 1697 (1687–1740) | 404 (380–452) | 296 (290–405) | 2434 (2371–2725) |
-| verify text | 32 (23–124) | 856 (840–870) | 126 (117–429) | 5 (1–11) | 81 (42–94) |
-| type text | 76 (72–159) | 1812 (1757–1833) | 1094 (593–1134) | 721 (716–985) | 2083 (2015–2095) |
-| tap (echo) | 134 (107–164) | 1925 (1893–1945) | 559 (551–580) | 300 (281–308) | 2125 (2030–2370) |
-| verify text | 29 (26–131) | 931 (909–967) | 537 (505–547) | 6 (2–8) | 107 (72–127) |
-| long press | 575 (570–579) | 2438 (2396–2843) | 1244 (1218–1282) | 757 (737–787) | 4492 (4401–4762) |
-| verify text | 23 (13–27) | 926 (918–958) | 40 (37–204) | 5 (2–6) | 102 (70–124) |
-| swipe / scroll | 1540 (1505–1582) | 3178 (3169–3194) | 688 (677–726) | 5 (2–12) | 4132 (3924–4482) |
-| verify visible | 7 (3–11) | 896 (893–917) | 102 (83–125) | 2 (1–3) | 117 (85–177) |
-| flow total (9 ops) | ~2.6 s | ~14.8 s | ~4.9 s | ~2.4 s | ~16.3 s |
+| tap | 404 (380–452) | 296 (290–405) | 2434 (2371–2725) | 1697 (1687–1740) | 69 (63–463) |
+| verify text | 126 (117–429) | 5 (1–11) | 81 (42–94) | 856 (840–870) | 32 (23–124) |
+| type text | 1094 (593–1134) | 721 (716–985) | 2083 (2015–2095) | 1812 (1757–1833) | 76 (72–159) |
+| tap (echo) | 559 (551–580) | 300 (281–308) | 2125 (2030–2370) | 1925 (1893–1945) | 134 (107–164) |
+| verify text | 537 (505–547) | 6 (2–8) | 107 (72–127) | 931 (909–967) | 29 (26–131) |
+| long press | 1244 (1218–1282) | 757 (737–787) | 4492 (4401–4762) | 2438 (2396–2843) | 575 (570–579) |
+| verify text | 40 (37–204) | 5 (2–6) | 102 (70–124) | 926 (918–958) | 23 (13–27) |
+| swipe / scroll | 688 (677–726) | 5 (2–12) | 4132 (3924–4482) | 3178 (3169–3194) | 1540 (1505–1582) |
+| verify visible | 102 (83–125) | 2 (1–3) | 117 (85–177) | 896 (893–917) | 7 (3–11) |
+| flow total (9 ops) | ~4.9 s | ~2.4 s | ~16.3 s | ~14.8 s | ~2.6 s |
 
 ## How to run
 
