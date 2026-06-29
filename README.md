@@ -64,32 +64,20 @@ stable numbers.
 
 | Operation | mw agent | mw adb | Appium | Kakao | Maestro |
 |---|---|---|---|---|---|
-| **tap** | 69 (63–463) | 1697 (1687–1740) | 404 (380–452) | 296 (290–405) | 2434 (2371–2725) |
-| verify text | 32 (23–124) | 856 (840–870) | 126 (117–429) | **5 (1–11)** | 81 (42–94) |
-| **type text** | **76 (72–159)** | 1812 (1757–1833) | 1094 (593–1134) | 721 (716–985) | 2083 (2015–2095) |
+| tap | 69 (63–463) | 1697 (1687–1740) | 404 (380–452) | 296 (290–405) | 2434 (2371–2725) |
+| verify text | 32 (23–124) | 856 (840–870) | 126 (117–429) | 5 (1–11) | 81 (42–94) |
+| type text | 76 (72–159) | 1812 (1757–1833) | 1094 (593–1134) | 721 (716–985) | 2083 (2015–2095) |
 | tap (echo) | 134 (107–164) | 1925 (1893–1945) | 559 (551–580) | 300 (281–308) | 2125 (2030–2370) |
-| verify text | 29 (26–131) | 931 (909–967) | 537 (505–547) | **6 (2–8)** | 107 (72–127) |
-| **long press** | 575 (570–579) | 2438 (2396–2843) | 1244 (1218–1282) | 757 (737–787) | 4492 (4401–4762) |
-| verify text | 23 (13–27) | 926 (918–958) | 40 (37–204) | **5 (2–6)** | 102 (70–124) |
-| **swipe / scroll** | 1540 (1505–1582) | 3178 (3169–3194) | 688 (677–726) | **5 (2–12)** | 4132 (3924–4482) |
-| verify visible | 7 (3–11) | 896 (893–917) | 102 (83–125) | **2 (1–3)** | 117 (85–177) |
-| **flow total (9 ops)** | **~2.6 s** | ~14.8 s | ~4.9 s | **~2.4 s** | ~16.3 s |
+| verify text | 29 (26–131) | 931 (909–967) | 537 (505–547) | 6 (2–8) | 107 (72–127) |
+| long press | 575 (570–579) | 2438 (2396–2843) | 1244 (1218–1282) | 757 (737–787) | 4492 (4401–4762) |
+| verify text | 23 (13–27) | 926 (918–958) | 40 (37–204) | 5 (2–6) | 102 (70–124) |
+| swipe / scroll | 1540 (1505–1582) | 3178 (3169–3194) | 688 (677–726) | 5 (2–12) | 4132 (3924–4482) |
+| verify visible | 7 (3–11) | 896 (893–917) | 102 (83–125) | 2 (1–3) | 117 (85–177) |
+| flow total (9 ops) | ~2.6 s | ~14.8 s | ~4.9 s | ~2.4 s | ~16.3 s |
 
 App launch / tool startup is **excluded** (it isn't measured consistently across tools —
 e.g. Maestro's ~14.6 s JVM+driver init, Appium's session create, Kakao's
 `ActivityScenario.launch`).
-
-### How to read it
-- **Locate / verify** ops split by architecture: in‑process Kakao (2–6 ms, direct view
-  read) ≪ mobilewright‑agent (3 ms dump) ≪ Appium (warm a11y cache) ≪ adb / Maestro
-  (a full hierarchy dump, ~0.8–1 s, every time).
-- **Kakao gestures look slow (~300 ms)** because Espresso synchronizes the main thread
-  after every action — a raw `onView().perform(click())` is ~450 ms, *slower* than
-  Kakao's wrapper, so it's Espresso core, not Kakao, and not animations.
-- **mobilewright‑agent's only slow op is swipe** — `scrollIntoViewIfNeeded` iterates
-  swipe→dump until the element is on screen.
-- **Maestro** is slowest per action: it dumps the hierarchy, taps, then **re‑dumps to
-  confirm the UI changed**, so ~2 dumps + settle per gesture.
 
 ## How to run each tool
 
